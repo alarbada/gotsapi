@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"gotsapi"
-	"os"
-	"time"
+	"gotsapi/cmd/nested/pkg"
 
 	"github.com/gookit/goutil/dump"
 	"github.com/labstack/echo/v4"
@@ -27,34 +25,30 @@ type ExampleResponse struct {
 func ExampleHandler1(c echo.Context, params ExampleParams) (*ExampleResponse, error) {
 	dump.P(params)
 
-	return nil, fmt.Errorf("shit happens")
-
-	// return &ExampleResponse{Greeting: "Hello, " + params.Name}, nil
+	return &ExampleResponse{Greeting: "Hello, " + params.Name}, nil
 }
 
 func ExampleHandler2(c echo.Context, params ExampleParams) (*ExampleResponse, error) {
 	dump.P(params)
 
-	return nil, fmt.Errorf("shit happens")
-
-	// return &ExampleResponse{Greeting: "Hello, " + params.Name}, nil
+	return &ExampleResponse{Greeting: "Hello, " + params.Name}, nil
 }
+
+func HelloWorld(c echo.Context, params struct{}) (string, error) {
+	return "hello world", nil
+}
+
 
 func main() {
 	e := echo.New()
-	e.HTTPErrorHandler = func(err error, c echo.Context) {
-		c.JSON(400, map[string]string{
-			"error": err.Error(),
-		})
-	}
 	th := gotsapi.NewTypedHandlers(e)
 
 	gotsapi.AddHandler(th, ExampleHandler1)
 	gotsapi.AddHandler(th, ExampleHandler2)
+	gotsapi.AddHandler(th, HelloWorld)
+	gotsapi.AddHandler(th, pkg.SomeHandler)
 
-	now := time.Now()
-	os.WriteFile("scripts/apiclient.ts", []byte(th.GenerateTypescriptClient()), 0644)
-	fmt.Println(time.Since(now))
+	gotsapi.WriteToFile(th, "scripts/apiclient.ts")
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

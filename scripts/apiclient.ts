@@ -1,3 +1,4 @@
+
 export interface ApiError {
   message: string
   statusCode?: number
@@ -7,28 +8,31 @@ export type ApiResponse<T> =
   | { data: null; error: ApiError }
 export interface ApiClient {
   main: {
-    ExampleHandler1(params: {
-      name: string
-      users: {
-        name: string
-        age: number
-      }[]
-    }): Promise<
-      ApiResponse<{
-        greeting: string
-      }>
-    >
-    ExampleHandler2(params: {
-      name: string
-      users: {
-        name: string
-        age: number
-      }[]
-    }): Promise<
-      ApiResponse<{
-        greeting: string
-      }>
-    >
+    ExampleHandler1: (params: {
+    name: string
+    users: {
+    name: string
+    age: number
+  }[]
+  }) => Promise<ApiResponse<{
+    greeting: string
+  }>>
+    ExampleHandler2: (params: {
+    name: string
+    users: {
+    name: string
+    age: number
+  }[]
+  }) => Promise<ApiResponse<{
+    greeting: string
+  }>>
+    HelloWorld: (params: {
+  }) => Promise<ApiResponse<string>>
+  }
+  pkg: {
+    SomeHandler: (params: {
+  }) => Promise<ApiResponse<{
+  }>>
   }
   beforeRequest(hook: (config: RequestInit) => void): void
 }
@@ -73,9 +77,13 @@ export const createApiClient = (baseUrl: string): ApiClient => {
     }
   }
   const client: ApiClient = {
+    pkg: {
+      SomeHandler: (params) => doFetch("pkg.SomeHandler", params),
+    },
     main: {
       ExampleHandler1: (params) => doFetch("main.ExampleHandler1", params),
       ExampleHandler2: (params) => doFetch("main.ExampleHandler2", params),
+      HelloWorld: (params) => doFetch("main.HelloWorld", params),
     },
     beforeRequest: (hook) => {
       beforeRequestHook = hook
