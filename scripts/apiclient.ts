@@ -31,8 +31,7 @@ export interface ApiClient {
   }
   pkg: {
     SomeHandler: (params: {
-  }) => Promise<ApiResponse<{
-  }>>
+  }) => Promise<ApiResponse<string>>
   }
   beforeRequest(hook: (config: RequestInit) => void): void
 }
@@ -77,13 +76,13 @@ export const createApiClient = (baseUrl: string): ApiClient => {
     }
   }
   const client: ApiClient = {
-    pkg: {
-      SomeHandler: (params) => doFetch("pkg.SomeHandler", params),
-    },
     main: {
       ExampleHandler1: (params) => doFetch("main.ExampleHandler1", params),
       ExampleHandler2: (params) => doFetch("main.ExampleHandler2", params),
       HelloWorld: (params) => doFetch("main.HelloWorld", params),
+    },
+    pkg: {
+      SomeHandler: (params) => doFetch("pkg.SomeHandler", params),
     },
     beforeRequest: (hook) => {
       beforeRequestHook = hook

@@ -8,6 +8,17 @@ apiclient.beforeRequest((config: RequestInit) => {
   }
 })
 
-const response = await apiclient.main.HelloWorld({ name: "asdfa" })
-
-console.log(response.data, response.error)
+console.log(await apiclient.main.HelloWorld({ name: "asdfa" }))
+console.log(
+  await apiclient.main.ExampleHandler1({
+    name: "name",
+    users: [{ name: "name", age: 0 }],
+  })
+)
+console.log(
+  await apiclient.main.ExampleHandler2({
+    name: "name",
+    users: [{ name: "name", age: 0 }],
+  })
+)
+console.log(await apiclient.pkg.SomeHandler({}))

@@ -1,4 +1,4 @@
-module gotsapi
+module github.com/alarbada/gotsclient
 
 go 1.22.3
 

@@ -1,4 +1,4 @@
-package gotsapi
+package gotsclient
 
 import (
 	"fmt"
@@ -35,7 +35,7 @@ func AddHandler[P any, R any](th *TypedHandlers, handler Handler[P, R]) {
 		panic("Invalid function name format")
 	}
 
-	packageName := parts[0]
+	packageName := parts[len(parts)-2]
 	{
 		parts := strings.Split(packageName, "/")
 		if len(parts) > 0 {
@@ -43,12 +43,13 @@ func AddHandler[P any, R any](th *TypedHandlers, handler Handler[P, R]) {
 		}
 	}
 
-	handlerName := parts[1]
+	handlerName := parts[len(parts)-1]
 
 	path := fmt.Sprintf("/%s.%s", packageName, handlerName)
 	fullPath := fmt.Sprintf("%s.%s", packageName, handlerName)
 
 	th.handlers[fullPath] = reflect.TypeOf(handler)
+	fmt.Println(path)
 
 	th.e.POST(path, func(c echo.Context) error {
 		var params P

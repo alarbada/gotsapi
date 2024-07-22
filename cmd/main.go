@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gotsapi"
-	"gotsapi/cmd/nested/pkg"
+	"github.com/alarbada/gotsclient"
+	"github.com/alarbada/gotsclient/cmd/nested/pkg"
 
 	"github.com/gookit/goutil/dump"
 	"github.com/labstack/echo/v4"
@@ -38,17 +38,16 @@ func HelloWorld(c echo.Context, params struct{}) (string, error) {
 	return "hello world", nil
 }
 
-
 func main() {
 	e := echo.New()
-	th := gotsapi.NewTypedHandlers(e)
+	th := gotsclient.NewTypedHandlers(e)
 
-	gotsapi.AddHandler(th, ExampleHandler1)
-	gotsapi.AddHandler(th, ExampleHandler2)
-	gotsapi.AddHandler(th, HelloWorld)
-	gotsapi.AddHandler(th, pkg.SomeHandler)
+	gotsclient.AddHandler(th, ExampleHandler1)
+	gotsclient.AddHandler(th, ExampleHandler2)
+	gotsclient.AddHandler(th, HelloWorld)
+	gotsclient.AddHandler(th, pkg.SomeHandler)
 
-	gotsapi.WriteToFile(th, "scripts/apiclient.ts")
+	gotsclient.WriteToFile(th, "scripts/apiclient.ts")
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
