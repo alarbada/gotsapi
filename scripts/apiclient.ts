@@ -7,6 +7,10 @@ export type ApiResponse<T> =
   | { data: T; error: null }
   | { data: null; error: ApiError }
 export interface ApiClient {
+  pkg: {
+    SomeHandler: (params: {
+  }) => Promise<ApiResponse<string>>
+  }
   main: {
     ExampleHandler1: (params: {
     name: string
@@ -27,10 +31,6 @@ export interface ApiClient {
     greeting: string
   }>>
     HelloWorld: (params: {
-  }) => Promise<ApiResponse<string>>
-  }
-  pkg: {
-    SomeHandler: (params: {
   }) => Promise<ApiResponse<string>>
   }
   beforeRequest(hook: (config: RequestInit) => void): void
